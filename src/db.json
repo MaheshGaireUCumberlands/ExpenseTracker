@@ -1,0 +1,7 @@
+{
+  "expenses": [
+    { "id": 1, "title": "Groceries", "amount": 45.7, "date": "2025-09-01", "category": "Food", "notes": "" },
+    { "id": 2, "title": "Taxi to airport", "amount": 32.5, "date": "2025-09-04", "category": "Travel", "notes": "Airport run" },
+    { "id": 3, "title": "Electric bill", "amount": 78.21, "date": "2025-09-05", "category": "Bills", "notes": "" }
+  ]
+}

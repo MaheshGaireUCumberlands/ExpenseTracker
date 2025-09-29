@@ -1,0 +1,11 @@
+<mat-toolbar color="primary">
+  <span>Expense Tracker</span>
+  <span class="spacer"></span>
+  <button mat-icon-button routerLink="/expenses" title="Expenses"><mat-icon>list</mat-icon></button>
+  <button mat-icon-button routerLink="/add" title="Add"><mat-icon>add</mat-icon></button>
+  <button mat-icon-button routerLink="/summary" title="Summary"><mat-icon>pie_chart</mat-icon></button>
+</mat-toolbar>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

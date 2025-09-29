@@ -1,0 +1,44 @@
+<mat-card>
+  <div class="toolbar">
+    <button mat-raised-button color="primary" routerLink="/add">Add Expense</button>
+    <button mat-stroked-button routerLink="/summary">Summary</button>
+    <mat-form-field appearance="outline" class="filter">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search title or category" />
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let e">{{ e.date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let e">{{ e.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Category</th>
+      <td mat-cell *matCellDef="let e">{{ e.category }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef>Amount</th>
+      <td mat-cell *matCellDef="let e">{{ e.amount | currency }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let e">
+        <button mat-icon-button (click)="edit(e)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button color="warn" (click)="delete(e.id)"><mat-icon>delete</mat-icon></button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <div class="total">Total: <strong>{{ total | currency }}</strong></div>
+</mat-card>
