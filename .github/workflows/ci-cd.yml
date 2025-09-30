@@ -57,7 +57,9 @@ jobs:
 
     - name: 📊 Bundle analysis
       run: |
-        npx webpack-bundle-analyzer dist/angular-expense-tracker/browser/main*.js --report --mode static --report-filename bundle-report.html
+        # Generate stats.json and analyze bundle
+        ng build --stats-json --configuration production
+        npx webpack-bundle-analyzer dist/angular-expense-tracker/browser/stats.json --mode static --report bundle-report.html --no-open
         echo "Bundle size analysis completed"
 
     - name: 💾 Cache build artifacts
