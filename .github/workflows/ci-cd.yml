@@ -57,10 +57,16 @@ jobs:
 
     - name: 📊 Bundle analysis
       run: |
-        # Generate stats.json and analyze bundle
-        ng build --stats-json --configuration production
-        npx webpack-bundle-analyzer dist/angular-expense-tracker/browser/stats.json --mode static --report bundle-report.html --no-open
-        echo "Bundle size analysis completed"
+        # Simple bundle size check - analyze main bundle file
+        echo "Bundle analysis - checking main bundle size..."
+        MAIN_BUNDLE=$(find dist/angular-expense-tracker/browser -name "main-*.js" -type f)
+        if [ -f "$MAIN_BUNDLE" ]; then
+          BUNDLE_SIZE=$(stat -c%s "$MAIN_BUNDLE" 2>/dev/null || stat -f%z "$MAIN_BUNDLE" 2>/dev/null || echo "0")
+          echo "Main bundle size: $(($BUNDLE_SIZE / 1024)) KB"
+          echo "Bundle size analysis completed"
+        else
+          echo "Main bundle file not found"
+        fi
 
     - name: 💾 Cache build artifacts
       uses: actions/cache@v4
