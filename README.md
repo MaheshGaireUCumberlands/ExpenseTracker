@@ -225,8 +225,7 @@ npm run lint          # 🔍 Code quality checks
 
 - 🔗 **GitHub**: [@MaheshGaireUCumberlands](https://github.com/MaheshGaireUCumberlands)
 - 💼 **LinkedIn**: [Mahesh Gaire](https://www.linkedin.com/in/mahesh-gaire-a973b5238/)
-- 📧 **Email**: [Your Email]
-- 🌐 **Portfolio**: [Your Portfolio URL]
+- 📧 **Email**: mahesh.gaire07@gmail.com
 
 ### **Why This Project Stands Out**
 ✨ Demonstrates mastery of **latest Angular features**  
