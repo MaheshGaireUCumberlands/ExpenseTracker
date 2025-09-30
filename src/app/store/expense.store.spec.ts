@@ -104,7 +104,7 @@ describe('ExpenseStore (Simplified)', () => {
       expect(store.isLoading()).toBe(true);
 
       // Mock HTTP response
-      const req = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const req = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       expect(req.request.method).toBe('GET');
       req.flush(mockExpenses);
 
@@ -118,7 +118,7 @@ describe('ExpenseStore (Simplified)', () => {
     it('should calculate total expenses correctly', async () => {
       // Set up store with test data
       const loadPromise = store.loadExpenses();
-      const req = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const req = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       req.flush(mockExpenses);
 
       await loadPromise;
@@ -129,7 +129,7 @@ describe('ExpenseStore (Simplified)', () => {
     it('should group expenses by category', async () => {
       // Set up store with test data
       const loadPromise = store.loadExpenses();
-      const req = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const req = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       req.flush(mockExpenses);
 
       await loadPromise;
@@ -144,7 +144,7 @@ describe('ExpenseStore (Simplified)', () => {
     it('should handle loading errors gracefully', async () => {
       const loadPromise = store.loadExpenses();
       
-      const req = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const req = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       req.error(new ProgressEvent('Network error'));
 
       await loadPromise;
@@ -168,7 +168,7 @@ describe('ExpenseStore (Simplified)', () => {
 
       const addPromise = store.addExpense(newExpense);
       
-      const req = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const req = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(newExpense);
       req.flush(addedExpense);
@@ -181,7 +181,7 @@ describe('ExpenseStore (Simplified)', () => {
     it('should update existing expense', async () => {
       // First load some expenses
       store.loadExpenses();
-      const loadReq = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const loadReq = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       loadReq.flush(mockExpenses);
 
       const updatedExpense: Expense = {
@@ -191,7 +191,7 @@ describe('ExpenseStore (Simplified)', () => {
 
       const updatePromise = store.updateExpense(updatedExpense);
       
-      const req = httpTestingController.expectOne(`http://localhost:3000/expenses/${updatedExpense.id}`);
+      const req = httpTestingController.expectOne(`http://localhost:3000/api/expenses/${updatedExpense.id}`);
       expect(req.request.method).toBe('PUT');
       req.flush(updatedExpense);
 
@@ -205,14 +205,14 @@ describe('ExpenseStore (Simplified)', () => {
     it('should delete expense', async () => {
       // First load some expenses
       store.loadExpenses();
-      const loadReq = httpTestingController.expectOne('http://localhost:3000/expenses');
+      const loadReq = httpTestingController.expectOne('http://localhost:3000/api/expenses');
       loadReq.flush(mockExpenses);
 
       const expenseToDelete = mockExpenses[0];
 
       const deletePromise = store.deleteExpense(expenseToDelete.id!);
       
-      const req = httpTestingController.expectOne(`http://localhost:3000/expenses/${expenseToDelete.id}`);
+      const req = httpTestingController.expectOne(`http://localhost:3000/api/expenses/${expenseToDelete.id}`);
       expect(req.request.method).toBe('DELETE');
       req.flush({});
 

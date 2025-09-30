@@ -1,4 +1,5 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, effect } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit, inject, effect, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Chart, ChartData } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -22,8 +23,9 @@ export class ExpenseSummaryComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas', { static: false }) chartCanvas!: ElementRef<HTMLCanvasElement>;
   private chart: Chart | null = null;
   
-  // Inject the NgRx Signal Store
+  // Inject the NgRx Signal Store and platform ID
   private store = inject(ExpenseStore);
+  private platformId = inject(PLATFORM_ID);
   
   // Reactive data from store
   totalExpenses = this.store.totalExpenses;
@@ -48,17 +50,22 @@ export class ExpenseSummaryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    // Load expenses and set up reactive updates
-    this.store.loadExpenses();
+    // Only load expenses in browser environment to avoid SSR issues
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.loadExpenses();
+    }
     this.updateChartData();
   }
 
   ngAfterViewInit(): void {
-    // Small delay to ensure DOM is ready
-    setTimeout(() => {
-      this.createChart();
-      this.setupReactiveUpdates();
-    }, 100);
+    // Only create chart in browser environment
+    if (isPlatformBrowser(this.platformId)) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        this.createChart();
+        this.setupReactiveUpdates();
+      }, 100);
+    }
   }
 
   private createChart(): void {
