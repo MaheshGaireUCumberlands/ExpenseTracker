@@ -1,11 +1,54 @@
-<mat-card>
-  <h2>Spending by Category</h2>
-  <div class="chart-container" style="position: relative; height: 400px; width: 400px; margin: 0 auto;">
-    <canvas #chartCanvas width="400" height="400"></canvas>
-  </div>
+<mat-card class="expense-summary-card">
+  <mat-card-header>
+    <mat-card-title>Expense Summary</mat-card-title>
+  </mat-card-header>
   
-  <!-- Debug info -->
-  <div style="margin-top: 20px; font-size: 12px; color: #666;">
-    <p>Chart Data Debug: {{ debugInfo }}</p>
-  </div>
+  <mat-card-content>
+    <!-- Summary Stats -->
+    <div class="summary-stats">
+      <div class="stat-item">
+        <h3>${{ totalExpenses() | number:'1.2-2' }}</h3>
+        <p>Total Expenses</p>
+      </div>
+      <div class="stat-item">
+        <h3>${{ monthlyExpenses() | number:'1.2-2' }}</h3>
+        <p>This Month</p>
+      </div>
+      <div class="stat-item">
+        <h3>{{ expensesByCategory().length }}</h3>
+        <p>Categories</p>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-progress-spinner diameter="50"></mat-progress-spinner>
+        <p>Loading expenses...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error()) {
+      <div class="error-container">
+        <mat-icon>error</mat-icon>
+        <p>{{ error() }}</p>
+      </div>
+    }
+
+    <!-- Chart Container -->
+    @if (!isLoading() && !error()) {
+      <div class="chart-section">
+        <h3>Spending by Category</h3>
+        <div class="chart-container">
+          <canvas #chartCanvas width="400" height="400"></canvas>
+        </div>
+      </div>
+    }
+
+    <!-- Debug Info (only in development) -->
+    <div class="debug-info">
+      <small>{{ debugInfo }}</small>
+    </div>
+  </mat-card-content>
 </mat-card>

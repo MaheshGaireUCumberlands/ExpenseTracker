@@ -1,6 +1,6 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, inject, effect } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ExpenseService } from '../../services/expense.service';
+import { ExpenseStore } from '../../store/expense.store';
 import { Expense } from '../../models/expense.model';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router, RouterModule } from '@angular/router';
@@ -30,52 +30,52 @@ import { CommonModule } from '@angular/common';
 export class ExpenseListComponent implements OnInit {
   displayedColumns = ['date', 'title', 'category', 'amount', 'actions'];
   dataSource = new MatTableDataSource<Expense>([]);
-  total = 0;
+  
+  // Inject the NgRx Signal Store
+  private store = inject(ExpenseStore);
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
-  constructor(
-    private svc: ExpenseService,
-    private router: Router,
-    private snackBar: MatSnackBar,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  // Reactive data from store
+  expenses = this.store.filteredExpenses;
+  total = this.store.totalExpenses;
+  isLoading = this.store.isLoading;
+  error = this.store.error;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    // Update table data source when expenses change - must be in constructor for proper injection context
+    if (isPlatformBrowser(this.platformId)) {
+      effect(() => {
+        const expenses = this.expenses();
+        this.dataSource.data = expenses;
+      });
+    }
+  }
 
   ngOnInit(): void {
     // Only load data on the client side to prevent SSR errors
     if (isPlatformBrowser(this.platformId)) {
-      this.load();
+      this.store.loadExpenses();
     }
   }
 
-  load() {
-    this.svc.getExpenses().subscribe({
-      next: (list) => {
-        list.sort((a,b) => +new Date(b.date) - +new Date(a.date));
-        this.dataSource.data = list;
-        this.total = list.reduce((s, e) => s + (e.amount || 0), 0);
-      },
-      error: (error) => {
-        console.warn('Could not load expenses from API:', error);
-        // Show empty state or default data
-        this.dataSource.data = [];
-        this.total = 0;
-      }
-    });
-  }
-
   applyFilter(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
+    this.store.setSearchFilter(value.trim());
   }
 
   edit(e: Expense) {
     this.router.navigate(['/edit', e.id]);
   }
 
-  delete(id: number | undefined) {
+  async delete(id: number | undefined) {
     if (!id) return;
     if (!confirm('Delete expense?')) return;
-    this.svc.deleteExpense(id).subscribe(() => {
+    
+    try {
+      await this.store.deleteExpense(id);
       this.snackBar.open('Deleted', 'Close', { duration: 1500 });
-      this.load();
-    });
+    } catch (error) {
+      this.snackBar.open('Error deleting expense', 'Close', { duration: 3000 });
+    }
   }
 }

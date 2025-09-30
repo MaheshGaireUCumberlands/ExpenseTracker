@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { ExpenseService } from './expense.service';
 import { environment } from '../../environments/environment';
 
@@ -10,7 +11,10 @@ describe('ExpenseService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ExpenseService]
+      providers: [
+        ExpenseService,
+        { provide: PLATFORM_ID, useValue: 'browser' }
+      ]
     });
     service = TestBed.inject(ExpenseService);
     httpMock = TestBed.inject(HttpTestingController);

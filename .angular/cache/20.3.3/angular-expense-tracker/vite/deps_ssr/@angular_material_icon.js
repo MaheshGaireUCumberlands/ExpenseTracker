@@ -3,15 +3,15 @@ import {
   DomSanitizer
 } from "./chunk-6I56AR2Y.js";
 import {
-  MatCommonModule
-} from "./chunk-ZR52LDHM.js";
-import "./chunk-AJA5IKRN.js";
-import "./chunk-PCMDRIUN.js";
-import "./chunk-7CRM57YQ.js";
-import {
   HttpClient
 } from "./chunk-XZIJK4WL.js";
+import {
+  MatCommonModule
+} from "./chunk-FTANOR25.js";
+import "./chunk-PCMDRIUN.js";
+import "./chunk-7CRM57YQ.js";
 import "./chunk-TDFOKFYN.js";
+import "./chunk-AJA5IKRN.js";
 import "./chunk-JOW5UT56.js";
 import {
   ChangeDetectionStrategy,

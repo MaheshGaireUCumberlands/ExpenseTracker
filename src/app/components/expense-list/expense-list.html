@@ -40,5 +40,5 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <div class="total">Total: <strong>{{ total | currency }}</strong></div>
+  <div class="total">Total: <strong>{{ total() | currency }}</strong></div>
 </mat-card>
