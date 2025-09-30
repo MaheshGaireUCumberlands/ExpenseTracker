@@ -38,10 +38,25 @@
 
     <!-- Chart Container -->
     @if (!isLoading() && !error()) {
-      <div class="chart-section">
-        <h3>Spending by Category</h3>
+      <div class="chart-section" role="img" aria-labelledby="chart-title">
+        <h3 id="chart-title">Spending by Category</h3>
         <div class="chart-container">
-          <canvas #chartCanvas width="400" height="400"></canvas>
+          <canvas #chartCanvas width="400" height="400" 
+                  role="img" 
+                  aria-label="Pie chart showing expense distribution by category"
+                  [attr.aria-describedby]="hasChartData() ? 'chart-description' : 'no-data-description'">
+          </canvas>
+          <!-- Screen reader description -->
+          @if (hasChartData()) {
+            <div id="chart-description" class="sr-only">
+              Chart showing expenses distributed across {{ expensesByCategory().length }} categories, 
+              with total spending of ${{ totalExpenses() | number:'1.2-2' }}
+            </div>
+          } @else {
+            <div id="no-data-description" class="sr-only">
+              No expense data available to display in chart
+            </div>
+          }
         </div>
       </div>
     }

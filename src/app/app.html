@@ -1,14 +1,16 @@
-<mat-toolbar color="primary">
-  <span>{{ title() }}</span>
+<mat-toolbar color="primary" role="banner">
+  <span role="heading" aria-level="1">{{ title() }}</span>
   <span class="spacer"></span>
-  <button mat-icon-button routerLink="/expenses" title="Expenses"><mat-icon>list</mat-icon></button>
-  <button mat-icon-button routerLink="/add" title="Add"><mat-icon>add</mat-icon></button>
-  <button mat-icon-button routerLink="/summary" title="Summary"><mat-icon>pie_chart</mat-icon></button>
+  <nav role="navigation" aria-label="Main navigation">
+    <button mat-icon-button routerLink="/expenses" title="View Expenses" aria-label="View expenses list"><mat-icon>list</mat-icon></button>
+    <button mat-icon-button routerLink="/add" title="Add Expense" aria-label="Add new expense"><mat-icon>add</mat-icon></button>
+    <button mat-icon-button routerLink="/summary" title="View Summary" aria-label="View expense summary and charts"><mat-icon>pie_chart</mat-icon></button>
+  </nav>
 </mat-toolbar>
 
 <!-- PWA Controls -->
 <app-pwa-controls></app-pwa-controls>
 
-<div class="container">
+<main class="container" role="main" aria-label="Main content">
   <router-outlet></router-outlet>
-</div>
+</main>
