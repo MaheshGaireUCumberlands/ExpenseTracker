@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ExpenseService } from '../../services/expense.service';
 import { Expense } from '../../models/expense.model';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -34,18 +35,30 @@ export class ExpenseListComponent implements OnInit {
   constructor(
     private svc: ExpenseService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
-    this.load();
+    // Only load data on the client side to prevent SSR errors
+    if (isPlatformBrowser(this.platformId)) {
+      this.load();
+    }
   }
 
   load() {
-    this.svc.getExpenses().subscribe(list => {
-      list.sort((a,b) => +new Date(b.date) - +new Date(a.date));
-      this.dataSource.data = list;
-      this.total = list.reduce((s, e) => s + (e.amount || 0), 0);
+    this.svc.getExpenses().subscribe({
+      next: (list) => {
+        list.sort((a,b) => +new Date(b.date) - +new Date(a.date));
+        this.dataSource.data = list;
+        this.total = list.reduce((s, e) => s + (e.amount || 0), 0);
+      },
+      error: (error) => {
+        console.warn('Could not load expenses from API:', error);
+        // Show empty state or default data
+        this.dataSource.data = [];
+        this.total = 0;
+      }
     });
   }
 

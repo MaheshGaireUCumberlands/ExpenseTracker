@@ -1,9 +1,16 @@
-<p>expense-summary works!</p>
 <mat-card>
   <h2>Spending by Category</h2>
-  <canvas baseChart
-          [data]="pieData"
-          [options]="pieOptions"
-          chartType="pie">
-  </canvas>
+  <div class="chart-container" style="position: relative; height: 400px; width: 400px; margin: 0 auto;">
+    <canvas baseChart
+            [data]="pieData"
+            [options]="pieOptions"
+            chartType="pie">
+    </canvas>
+  </div>
+  
+  <!-- Debug info -->
+  <div style="margin-top: 20px; font-size: 12px; color: #666;">
+    <p>Labels: {{ pieData?.labels?.join(', ') || 'No labels' }}</p>
+    <p>Data: {{ pieData?.datasets?.[0]?.data?.join(', ') || 'No data' }}</p>
+  </div>
 </mat-card>

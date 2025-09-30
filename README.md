@@ -1,59 +1,82 @@
-# AngularExpenseTracker
+# Angular Expense Tracker (Sample Project)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.1.
+A simple **Angular 16** application demonstrating:
+- Component-based UI design
+- Routing
+- Data binding
+- Component communication
+- Unit testing with Jasmine & Karma
 
-## Development server
+This project serves as a sample work portfolio to showcase Angular development skills.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🚀 Features
+- **Product List** – displays products with name and price.
+- **Expense Summary** – shows total expenses with dynamic calculation.
+- **Routing** – navigate between product list and summary pages.
+- **Unit Tests** – sample Jasmine/Karma tests for components.
+- **Responsive UI** – built with Angular best practices.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🛠️ Tech Stack
+- [Angular 16+](https://angular.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [RxJS](https://rxjs.dev/)
+- [Jasmine/Karma](https://karma-runner.github.io/latest/index.html) (unit testing)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+---
 
-```bash
-ng generate component component-name
-```
+## 📂 Project Structure
+src/
+├── app/
+│ ├── components/
+│ │ ├── product-list/
+│ │ │ ├── product-list.component.ts
+│ │ │ ├── product-list.component.html
+│ │ │ ├── product-list.component.css
+│ │ │ └── product-list.component.spec.ts
+│ │ ├── expense-summary/
+│ │ │ ├── expense-summary.component.ts
+│ │ │ ├── expense-summary.component.html
+│ │ │ ├── expense-summary.component.css
+│ │ │ └── expense-summary.component.spec.ts
+│ ├── app-routing.module.ts
+│ ├── app.component.ts
+│ └── app.module.ts
+├── assets/
+├── index.html
+└── main.ts
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## ⚙️ Setup & Installation
 
-## Building
+1. **Clone this repo**
+   ```bash
+   git clone https://github.com/MaheshGaireUCumberlands/ExpenseTracker.git
+   cd angular-expense-tracker
+2. **Install Dependencies**
+    npm install
+3. **Run the dev server**
+    ng serve
 
-To build the project run:
+4. **Navigate to 👉 http://localhost:4200/**
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
+🧪 Running Tests
+Run Angular unit tests with:
 ng test
-```
+📦 Build for Production
+To build the project:
+ng build
+The output will be in the dist/ folder.
 
-## Running end-to-end tests
+🤝 Contribution
+This is a personal sample project for demonstration purposes, but feel free to fork and extend it.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+👤 Author
+Mahesh Gaire
+GitHub: @MaheshGaireUCumberlands
+LinkedIn: https://www.linkedin.com/in/mahesh-gaire-a973b5238/

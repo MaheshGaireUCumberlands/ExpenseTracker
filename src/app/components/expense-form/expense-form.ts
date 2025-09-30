@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ExpenseService } from '../../services/expense.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -36,7 +37,8 @@ export class ExpenseFormComponent implements OnInit {
     private svc: ExpenseService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
@@ -49,10 +51,15 @@ export class ExpenseFormComponent implements OnInit {
     });
 
     const param = this.route.snapshot.paramMap.get('id');
-    if (param) {
+    if (param && isPlatformBrowser(this.platformId)) {
       this.id = +param;
-      this.svc.getExpense(this.id).subscribe(e => {
-        this.form.patchValue({ ...e, date: e.date?.slice(0,10) });
+      this.svc.getExpense(this.id).subscribe({
+        next: (e) => {
+          this.form.patchValue({ ...e, date: e.date?.slice(0,10) });
+        },
+        error: (error) => {
+          console.warn('Could not load expense for editing:', error);
+        }
       });
     }
   }
@@ -63,14 +70,26 @@ export class ExpenseFormComponent implements OnInit {
 
     if (this.id) {
       payload.id = this.id;
-      this.svc.updateExpense(payload).subscribe(() => {
-        this.snackBar.open('Updated', 'Close', { duration: 1400 });
-        this.router.navigate(['/expenses']);
+      this.svc.updateExpense(payload).subscribe({
+        next: () => {
+          this.snackBar.open('Updated', 'Close', { duration: 1400 });
+          this.router.navigate(['/expenses']);
+        },
+        error: (error) => {
+          console.error('Error updating expense:', error);
+          this.snackBar.open('Error updating expense', 'Close', { duration: 3000 });
+        }
       });
     } else {
-      this.svc.addExpense(payload).subscribe(() => {
-        this.snackBar.open('Saved', 'Close', { duration: 1400 });
-        this.router.navigate(['/expenses']);
+      this.svc.addExpense(payload).subscribe({
+        next: () => {
+          this.snackBar.open('Saved', 'Close', { duration: 1400 });
+          this.router.navigate(['/expenses']);
+        },
+        error: (error) => {
+          console.error('Error saving expense:', error);
+          this.snackBar.open('Error saving expense', 'Close', { duration: 3000 });
+        }
       });
     }
   }
