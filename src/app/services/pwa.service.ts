@@ -17,7 +17,7 @@ export class PwaService {
   // PWA installation and update states
   private deferredPrompt: any = null;
   private isInstallable = new BehaviorSubject<boolean>(false);
-  private isOnline = new BehaviorSubject<boolean>(navigator.onLine);
+  private isOnline = new BehaviorSubject<boolean>(isPlatformBrowser(this.platformId) ? navigator.onLine : true);
   private updateAvailable = new BehaviorSubject<boolean>(false);
 
   // Public observables

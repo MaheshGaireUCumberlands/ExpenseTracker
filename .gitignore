@@ -64,3 +64,4 @@ stats.json
 # Test reports
 test-results/
 junit.xml
+.vercel
