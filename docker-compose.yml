@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # Frontend - Angular Application
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: expense-tracker-frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+    networks:
+      - expense-tracker-network
+    restart: unless-stopped
+
+  # Backend - JSON Server
+  backend:
+    image: node:20-alpine
+    container_name: expense-tracker-backend
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./db.json:/app/db.json
+      - ./package.json:/app/package.json
+    command: >
+      sh -c "npm install -g json-server@1.0.0-beta.3 &&
+             json-server --watch db.json --host 0.0.0.0 --port 3000"
+    networks:
+      - expense-tracker-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/expenses"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Production build
+  production:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: expense-tracker-prod
+    ports:
+      - "8080:80"
+    networks:
+      - expense-tracker-network
+    restart: unless-stopped
+    profiles:
+      - production
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Database (for future enhancements)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: expense-tracker-db
+  #   environment:
+  #     POSTGRES_DB: expense_tracker
+  #     POSTGRES_USER: expense_user
+  #     POSTGRES_PASSWORD: expense_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - expense-tracker-network
+  #   restart: unless-stopped
+
+networks:
+  expense-tracker-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:

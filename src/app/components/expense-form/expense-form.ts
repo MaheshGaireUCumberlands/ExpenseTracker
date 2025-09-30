@@ -38,7 +38,7 @@ export class ExpenseFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit(): void {

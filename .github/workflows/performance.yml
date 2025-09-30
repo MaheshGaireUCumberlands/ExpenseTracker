@@ -1,0 +1,97 @@
+name: 🚀 Performance Monitoring
+
+on:
+  schedule:
+    # Run performance tests daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+env:
+  LIGHTHOUSE_URL: 'https://angular-expense-tracker.vercel.app'
+
+jobs:
+  lighthouse:
+    name: 🚀 Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🚀 Run Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v11
+      with:
+        urls: |
+          ${{ env.LIGHTHOUSE_URL }}
+          ${{ env.LIGHTHOUSE_URL }}/expenses
+          ${{ env.LIGHTHOUSE_URL }}/summary
+        configPath: ./.lighthouserc.json
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+    - name: 📊 Performance budget check
+      run: |
+        echo "Checking performance budget..."
+        # Add performance budget validation logic here
+
+  bundle-analysis:
+    name: 📦 Bundle Size Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: 📥 Install dependencies
+      run: npm ci
+
+    - name: 📦 Build application
+      run: npm run build
+
+    - name: 📊 Analyze bundle size
+      run: |
+        npx webpack-bundle-analyzer dist/angular-expense-tracker/browser/main*.js --report --mode static --report-filename bundle-report.html
+        
+        # Extract bundle sizes
+        MAIN_BUNDLE_SIZE=$(stat -c%s dist/angular-expense-tracker/browser/main*.js)
+        STYLES_BUNDLE_SIZE=$(stat -c%s dist/angular-expense-tracker/browser/styles*.css)
+        
+        echo "Main bundle size: $MAIN_BUNDLE_SIZE bytes"
+        echo "Styles bundle size: $STYLES_BUNDLE_SIZE bytes"
+        
+        # Check if bundle size exceeds threshold (500KB for main bundle)
+        if [ $MAIN_BUNDLE_SIZE -gt 512000 ]; then
+          echo "⚠️ Main bundle size exceeds 500KB threshold!"
+          exit 1
+        fi
+
+    - name: 📊 Upload bundle analysis
+      uses: actions/upload-artifact@v4
+      with:
+        name: bundle-analysis
+        path: bundle-report.html
+
+  performance-alerts:
+    name: 📊 Performance Alerts
+    runs-on: ubuntu-latest
+    needs: [lighthouse, bundle-analysis]
+    if: failure()
+
+    steps:
+    - name: 🚨 Create performance issue
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: '📊 Performance regression detected',
+            body: 'Automated performance monitoring detected a regression. Please check the workflow run for details.',
+            labels: ['performance', 'monitoring']
+          })

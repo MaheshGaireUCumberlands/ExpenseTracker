@@ -1,0 +1,77 @@
+name: 🔒 Security Scan
+
+on:
+  schedule:
+    # Run every Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: 🔒 Security Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: 📥 Install dependencies
+      run: npm ci
+
+    - name: 🔍 Run npm audit
+      run: |
+        npm audit --audit-level=moderate --json > audit-results.json || true
+        npm audit --audit-level=moderate
+
+    - name: 🔒 Snyk security scan
+      uses: snyk/actions/node@master
+      continue-on-error: true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=medium --json-file-output=snyk-results.json
+
+    - name: 🔍 OWASP Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: 'angular-expense-tracker'
+        path: '.'
+        format: 'JSON'
+        args: >
+          --enableRetired
+          --enableExperimental
+          --out reports
+
+    - name: 📊 Upload security results
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-reports
+        path: |
+          audit-results.json
+          snyk-results.json
+          reports/
+
+    - name: 💬 Create security issue
+      if: failure()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: '🔒 Security vulnerabilities detected',
+            body: 'Automated security scan detected vulnerabilities. Please check the workflow run for details.',
+            labels: ['security', 'bug']
+          })

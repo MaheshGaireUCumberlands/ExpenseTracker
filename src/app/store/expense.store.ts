@@ -5,10 +5,10 @@ import { ExpenseService } from '../services/expense.service';
 import { OfflineStorageService } from '../services/offline-storage.service';
 import { PwaService } from '../services/pwa.service';
 
-type ExpenseFilter = {
+interface ExpenseFilter {
   searchText: string;
   category: string | null;
-};
+}
 
 export const ExpenseStore = signalStore(
   { providedIn: 'root' },

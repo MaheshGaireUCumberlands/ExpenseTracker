@@ -6,9 +6,22 @@
     "start": "ng serve",
     "start:backend": "json-server --watch db.json --port 3000",
     "start:dev": "concurrently \"ng serve --port 4200\" \"json-server --watch db.json --port 3000\"",
+    "start:prod": "http-server dist/angular-expense-tracker/browser -p 8080",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "test": "ng test",
-    "lint": "ng lint"
+    "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadless --code-coverage",
+    "test:coverage": "ng test --no-watch --code-coverage",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "docker:build": "docker build -t angular-expense-tracker .",
+    "docker:run": "docker run -p 8080:80 angular-expense-tracker",
+    "docker:dev": "docker-compose up",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up",
+    "security:audit": "npm audit --audit-level=high",
+    "bundle:analyze": "ng build --stats-json && npx webpack-bundle-analyzer dist/angular-expense-tracker/browser/stats.json",
+    "precommit": "npm run lint && npm run test:ci",
+    "prepare": "husky install || true"
   },
   "prettier": {
     "printWidth": 100,
@@ -49,13 +62,19 @@
     "@angular/build": "^20.3.1",
     "@angular/cli": "^20.3.1",
     "@angular/compiler-cli": "^20.3.0",
+    "@axe-core/cli": "^4.10.2",
     "@testing-library/angular": "^18.1.0",
     "@testing-library/jest-dom": "^6.9.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
+    "angular-eslint": "20.3.0",
+    "bc": "^0.1.1",
     "concurrently": "^9.2.1",
+    "eslint": "^9.35.0",
+    "http-server": "^14.1.1",
+    "husky": "^9.1.7",
     "jasmine-core": "~5.9.0",
     "jest-environment-jsdom": "^30.2.0",
     "json-server": "^1.0.0-beta.3",
@@ -64,6 +83,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.40.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

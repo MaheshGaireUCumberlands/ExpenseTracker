@@ -1,0 +1,70 @@
+# Docker ignore file for optimized builds
+node_modules
+npm-debug.log
+dist
+.git
+.gitignore
+README.md
+.env
+.nyc_output
+coverage
+.coverage
+.coverage.*
+.cache
+.parcel-cache
+
+# Angular specific
+.angular/cache
+e2e
+src/**/*.spec.ts
+*.spec.ts
+**/*.spec.ts
+karma.conf.js
+protractor.conf.js
+
+# Development files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Test coverage
+coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# parcel-bundler cache (https://parceljs.org/)
+.parcel-cache
+
+# Docker files
+Dockerfile*
+docker-compose*
+.dockerignore

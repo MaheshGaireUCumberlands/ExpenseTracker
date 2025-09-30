@@ -2,7 +2,34 @@
 - ✅ **Chart.js 4.5+ Integration** - Interactive charts with signal-based reactivity
 - ✅ **Real-time Updates** - Charts automatically refresh with state changes
 - ✅ **Offline Fallbacks** - Cached chart data for offline viewing
-- ✅ **Responsive Design** - Charts adapt to all screen sizes and orientations
+- ✅ **Responsive Design** - Charts adapt to all ### **Available Scripts**
+```bash
+# Development
+npm run start:dev     # 🚀 Run both frontend & backend concurrently
+npm run start:prod    # 🌐 Serve production build locally
+
+# Building
+npm run build         # 📦 Standard build
+npm run build:prod    # 📦 Production build with PWA & SSR
+
+# Testing & Quality
+npm run test          # 🧪 Run comprehensive test suite (23 tests)
+npm run test:ci       # 🧪 CI test run with coverage
+npm run lint          # 📏 Code quality checks with TypeScript rules
+npm run security:audit # 🔒 Security vulnerability scanning
+
+# Docker
+npm run docker:build # 🐳 Build Docker image
+npm run docker:run   # 🐳 Run Docker container
+npm run docker:dev   # 🐳 Start development environment
+npm run docker:prod  # 🐳 Start production environment
+
+# DevOps
+./setup-devops.sh    # 🚀 Complete DevOps setup validation
+npm run bundle:analyze # 📊 Bundle size analysis
+```
+
+---s and orientations
 
 ### 🧪 **Comprehensive Testing Suite**
 - ✅ **100% Test Coverage** - 23 passing tests demonstrating testing mastery
@@ -61,6 +88,16 @@ A **cutting-edge Angular 20** application demonstrating **enterprise-level devel
 - ✅ **OnPush Strategy** - Optimized change detection throughout
 - ✅ **Bundle Optimization** - Tree shaking with minimal production builds
 - ✅ **PWA Caching** - Intelligent caching strategies for optimal performance
+
+### 🐳 **Enterprise DevOps & Deployment**
+- ✅ **Docker Containerization** - Multi-stage builds with production-ready Nginx
+- ✅ **GitHub Actions CI/CD** - Automated testing, security scanning, and deployment
+- ✅ **Performance Monitoring** - Lighthouse CI with automated performance budgets
+- ✅ **Security Scanning** - CodeQL, Snyk, and dependency vulnerability detection
+- ✅ **Quality Gates** - Automated PR validation with coverage thresholds
+- ✅ **Cloud Deployment** - Vercel/Netlify integration with zero-config deployment
+- ✅ **Container Registry** - GitHub Packages integration for Docker images
+- ✅ **Infrastructure as Code** - Complete Docker Compose environments
 
 ---
 
@@ -295,25 +332,50 @@ src/
 ## 🚀 **Quick Start**
 
 ### **Prerequisites**
-- Node.js 18+ 
+- Node.js 20+ 
 - Angular CLI 20+
 - TypeScript 5.9+
+- Docker Desktop (optional, for containerization)
 
-### **Installation & Setup**
+### **Quick Setup**
 ```bash
 # Clone the repository
 git clone https://github.com/MaheshGaireUCumberlands/ExpenseTracker.git
 cd angular-expense-tracker
 
-# Install dependencies
-npm install
+# Run automated setup script
+chmod +x setup-devops.sh
+./setup-devops.sh
 
-# Start both frontend and backend concurrently
+# Or manual setup:
+npm install
+npm run test:ci
+npm run build:prod
+```
+
+### **Development Environment**
+```bash
+# Start both frontend and backend
 npm run start:dev
 
-# Or start individually:
+# Individual services:
 npm run start         # Frontend (http://localhost:4200)
 npm run start:backend # Backend API (http://localhost:3000)
+
+# With Docker:
+docker-compose up     # Full development environment
+```
+
+### **Production Deployment**
+```bash
+# Build for production
+npm run build:prod
+
+# Docker production
+docker-compose -f docker-compose.prod.yml up
+
+# Deploy to cloud platforms
+# See DEPLOYMENT.md for detailed setup
 ```
 
 ### **Available Scripts**

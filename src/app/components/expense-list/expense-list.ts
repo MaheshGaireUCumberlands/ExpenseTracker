@@ -42,7 +42,7 @@ export class ExpenseListComponent implements OnInit {
   isLoading = this.store.isLoading;
   error = this.store.error;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
     // Update table data source when expenses change - must be in constructor for proper injection context
     if (isPlatformBrowser(this.platformId)) {
       effect(() => {
