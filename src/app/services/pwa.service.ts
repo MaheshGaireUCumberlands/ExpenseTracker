@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { SwUpdate, SwPush } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, interval } from 'rxjs';
@@ -11,6 +12,7 @@ export class PwaService {
   private swUpdate = inject(SwUpdate);
   private swPush = inject(SwPush);
   private snackBar = inject(MatSnackBar);
+  private platformId = inject(PLATFORM_ID);
 
   // PWA installation and update states
   private deferredPrompt: any = null;
@@ -65,29 +67,33 @@ export class PwaService {
   }
 
   private setupNetworkStatusTracking(): void {
-    window.addEventListener('online', () => {
-      this.isOnline.next(true);
-      this.showNotification('Back online! 🌐', 'DISMISS', 3000);
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('online', () => {
+        this.isOnline.next(true);
+        this.showNotification('Back online! 🌐', 'DISMISS', 3000);
+      });
 
-    window.addEventListener('offline', () => {
-      this.isOnline.next(false);
-      this.showNotification('You are offline. Some features may be limited.', 'OK', 5000);
-    });
+      window.addEventListener('offline', () => {
+        this.isOnline.next(false);
+        this.showNotification('You are offline. Some features may be limited.', 'OK', 5000);
+      });
+    }
   }
 
   private setupInstallPrompt(): void {
-    window.addEventListener('beforeinstallprompt', (e: any) => {
-      e.preventDefault();
-      this.deferredPrompt = e;
-      this.isInstallable.next(true);
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('beforeinstallprompt', (e: any) => {
+        e.preventDefault();
+        this.deferredPrompt = e;
+        this.isInstallable.next(true);
+      });
 
-    window.addEventListener('appinstalled', () => {
-      this.deferredPrompt = null;
-      this.isInstallable.next(false);
-      this.showNotification('Expense Tracker installed successfully! 🎉', 'GREAT', 3000);
-    });
+      window.addEventListener('appinstalled', () => {
+        this.deferredPrompt = null;
+        this.isInstallable.next(false);
+        this.showNotification('Expense Tracker installed successfully! 🎉', 'GREAT', 3000);
+      });
+    }
   }
 
   // Public methods

@@ -11,14 +11,19 @@ import {
   inject,
   makeEnvironmentProviders,
   provideAppInitializer,
-  require_cjs,
-  require_operators,
   setClassMetadata,
   ɵɵdefineInjectable,
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-65RRJSLW.js";
+} from "./chunk-USW2LRIU.js";
+import {
+  require_operators
+} from "./chunk-2UVUUPPC.js";
+import {
+  require_cjs
+} from "./chunk-C27DBZK2.js";
+import "./chunk-K54IFBYX.js";
 import {
   __spreadValues,
   __toESM
