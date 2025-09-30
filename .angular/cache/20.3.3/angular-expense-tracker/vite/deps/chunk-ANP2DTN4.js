@@ -1,14 +1,14 @@
 import {
-  BidiModule
-} from "./chunk-ONX4KNJN.js";
-import {
   _CdkPrivateStyleLoader
 } from "./chunk-B3FCPEJK.js";
 import {
   Platform,
   coerceElement,
   coerceNumberProperty
-} from "./chunk-72DOSFHD.js";
+} from "./chunk-QJISDLLF.js";
+import {
+  BidiModule
+} from "./chunk-ONX4KNJN.js";
 import {
   APP_ID,
   BehaviorSubject,
@@ -3120,4 +3120,4 @@ export {
   removeAriaReferencedId,
   MatCommonModule
 };
-//# sourceMappingURL=chunk-DPFQDPSY.js.map
+//# sourceMappingURL=chunk-ANP2DTN4.js.map

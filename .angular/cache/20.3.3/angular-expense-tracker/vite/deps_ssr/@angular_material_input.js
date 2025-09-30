@@ -4,12 +4,6 @@ import {
   _ErrorStateTracker
 } from "./chunk-PJJ4KJCI.js";
 import {
-  FormGroupDirective,
-  NgControl,
-  NgForm,
-  Validators
-} from "./chunk-VLO3JKZJ.js";
-import {
   MAT_FORM_FIELD,
   MatError,
   MatFormField,
@@ -20,6 +14,12 @@ import {
   MatPrefix,
   MatSuffix
 } from "./chunk-ROJE2GGC.js";
+import {
+  FormGroupDirective,
+  NgControl,
+  NgForm,
+  Validators
+} from "./chunk-VLO3JKZJ.js";
 import "./chunk-HRLVYT26.js";
 import {
   getSupportedInputTypes
@@ -27,16 +27,16 @@ import {
 import {
   coerceBooleanProperty
 } from "./chunk-QJVLQKZV.js";
-import {
-  MatCommonModule,
-  _IdGenerator
-} from "./chunk-ZR52LDHM.js";
 import "./chunk-FQL6O3MQ.js";
-import "./chunk-AJA5IKRN.js";
 import {
   AutofillMonitor,
   TextFieldModule
 } from "./chunk-C6XAA7NV.js";
+import {
+  MatCommonModule,
+  _IdGenerator
+} from "./chunk-ZR52LDHM.js";
+import "./chunk-AJA5IKRN.js";
 import "./chunk-PCMDRIUN.js";
 import {
   Platform

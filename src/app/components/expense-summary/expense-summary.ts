@@ -1,10 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ExpenseService } from '../../services/expense.service';
-import { ChartData, ChartOptions } from 'chart.js';
+import { Chart, ChartData } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
-import { BaseChartDirective } from 'ng2-charts';
 import { CommonModule } from '@angular/common';
+import { Expense } from '../../models/expense.model';
 
 @Component({
   selector: 'app-expense-summary',
@@ -12,39 +11,72 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./expense-summary.scss'],
   imports: [
     CommonModule,
-    MatCardModule,
-    BaseChartDirective
+    MatCardModule
   ]
 })
-export class ExpenseSummaryComponent implements OnInit {
-  pieData: ChartData<'pie', number[], string | string[]> = {
+export class ExpenseSummaryComponent implements OnInit, AfterViewInit {
+  @ViewChild('chartCanvas', { static: false }) chartCanvas!: ElementRef<HTMLCanvasElement>;
+  private chart: Chart | null = null;
+  pieData: ChartData<'pie', number[], string> = {
     labels: [],
     datasets: [{ data: [] }]
   };
-  pieOptions: ChartOptions<'pie'> = { 
-    responsive: true,
-    maintainAspectRatio: false
-  };
+  
+  get debugInfo(): string {
+    try {
+      const labels = this.pieData?.labels || [];
+      const data = this.pieData?.datasets?.[0]?.data || [];
+      return `Labels: ${labels.join(', ')} | Data: ${data.join(', ')}`;
+    } catch (e) {
+      return 'Debug info error';
+    }
+  }
 
-  constructor(
-    private svc: ExpenseService,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  constructor(private svc: ExpenseService) {}
 
   ngOnInit(): void {
     // Initialize with default data first
     this.setDefaultData();
-    
-    // Only fetch data on the client side to avoid SSR issues
-    if (isPlatformBrowser(this.platformId)) {
-      // Small delay to ensure DOM is ready
-      setTimeout(() => {
-        this.loadExpenseData();
-      }, 100);
+    this.loadExpenseData();
+  }
+
+  ngAfterViewInit(): void {
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      this.createChart();
+    }, 100);
+  }
+
+  private createChart(): void {
+    if (this.chartCanvas?.nativeElement) {
+      const ctx = this.chartCanvas.nativeElement.getContext('2d');
+      if (ctx) {
+        this.chart = new Chart(ctx, {
+          type: 'pie',
+          data: this.pieData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }
+        });
+      }
+    }
+  }
+
+  private updateChart(): void {
+    if (this.chart) {
+      this.chart.data = this.pieData;
+      this.chart.update();
     }
   }
 
   private setDefaultData(): void {
+    console.log('Setting default chart data');
     this.pieData = {
       labels: ['Food', 'Travel', 'Bills'],
       datasets: [{
@@ -56,6 +88,7 @@ export class ExpenseSummaryComponent implements OnInit {
         ]
       }]
     };
+    console.log('Default chart data set:', this.pieData);
   }
 
   hasChartData(): boolean {
@@ -65,10 +98,10 @@ export class ExpenseSummaryComponent implements OnInit {
   private loadExpenseData(): void {
     // Try to load from API, fallback to default data
     this.svc.getExpenses().subscribe({
-      next: (list) => {
+      next: (list: Expense[]) => {
         if (list && list.length > 0) {
           const map = new Map<string, number>();
-          list.forEach(e => map.set(e.category, (map.get(e.category) || 0) + (e.amount || 0)));
+          list.forEach((e: Expense) => map.set(e.category, (map.get(e.category) || 0) + (e.amount || 0)));
           
           this.pieData = {
             labels: Array.from(map.keys()),
@@ -84,11 +117,12 @@ export class ExpenseSummaryComponent implements OnInit {
               ]
             }]
           };
+          this.updateChart();
         } else {
           this.setDefaultData();
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.warn('Could not connect to API, using default data:', error);
         this.setDefaultData();
       }

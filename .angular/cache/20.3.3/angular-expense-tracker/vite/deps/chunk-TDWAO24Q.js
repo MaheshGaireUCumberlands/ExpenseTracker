@@ -1,38 +1,37 @@
-import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   ScrollDispatcher,
   ScrollingModule,
   ViewportRuler
-} from "./chunk-FFSNWSGU.js";
+} from "./chunk-BYCWQ276.js";
 import {
   _isTestEnvironment
-} from "./chunk-UNWESXI3.js";
+} from "./chunk-JVCEW5K5.js";
 import {
   coerceCssPixelValue
-} from "./chunk-QJVLQKZV.js";
+} from "./chunk-46HAYV32.js";
+import {
+  supportsScrollBehavior
+} from "./chunk-7UJZXIJQ.js";
 import {
   ESCAPE,
   _IdGenerator,
   _getEventTarget,
   coerceArray,
   hasModifierKey
-} from "./chunk-ZR52LDHM.js";
+} from "./chunk-ANP2DTN4.js";
 import {
-  supportsScrollBehavior
-} from "./chunk-FQL6O3MQ.js";
+  _CdkPrivateStyleLoader
+} from "./chunk-B3FCPEJK.js";
+import {
+  Platform
+} from "./chunk-QJISDLLF.js";
+import {
+  Location
+} from "./chunk-BK5L2YMN.js";
 import {
   BidiModule,
   Directionality
-} from "./chunk-AJA5IKRN.js";
-import {
-  _CdkPrivateStyleLoader
-} from "./chunk-PCMDRIUN.js";
-import {
-  Platform
-} from "./chunk-7CRM57YQ.js";
-import {
-  Location
-} from "./chunk-TDFOKFYN.js";
+} from "./chunk-ONX4KNJN.js";
 import {
   ANIMATION_MODULE_TYPE,
   ApplicationRef,
@@ -53,16 +52,18 @@ import {
   Output,
   Renderer2,
   RendererFactory2,
+  Subject,
+  Subscription,
   TemplateRef,
   ViewContainerRef,
   ViewEncapsulation,
   afterNextRender,
   booleanAttribute,
   createComponent,
+  filter,
   inject,
-  require_cjs,
-  require_operators,
   setClassMetadata,
+  takeWhile,
   ɵɵInheritDefinitionFeature,
   ɵɵNgOnChangesFeature,
   ɵɵProvidersFeature,
@@ -72,12 +73,11 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵgetInheritedFactory
-} from "./chunk-65RRJSLW.js";
+} from "./chunk-56MW5J6X.js";
 import {
   __spreadProps,
-  __spreadValues,
-  __toESM
-} from "./chunk-6DU2HRTW.js";
+  __spreadValues
+} from "./chunk-GOMI4DH3.js";
 
 // node_modules/@angular/cdk/fesm2022/portal.mjs
 function throwNullPortalError() {
@@ -632,8 +632,6 @@ var PortalModule = class _PortalModule {
 })();
 
 // node_modules/@angular/cdk/fesm2022/overlay-module.mjs
-var import_rxjs = __toESM(require_cjs(), 1);
-var import_operators = __toESM(require_operators(), 1);
 var scrollBehaviorSupported = supportsScrollBehavior();
 function createBlockScrollStrategy(injector) {
   return new BlockScrollStrategy(injector.get(ViewportRuler), injector.get(DOCUMENT));
@@ -732,7 +730,7 @@ var CloseScrollStrategy = class {
     if (this._scrollSubscription) {
       return;
     }
-    const stream = this._scrollDispatcher.scrolled(0).pipe((0, import_operators.filter)((scrollable) => {
+    const stream = this._scrollDispatcher.scrolled(0).pipe(filter((scrollable) => {
       return !scrollable || !this._overlayRef.overlayElement.contains(scrollable.getElementRef().nativeElement);
     }));
     if (this._config && this._config.threshold && this._config.threshold > 1) {
@@ -1292,12 +1290,12 @@ var OverlayRef = class {
   _animationsDisabled;
   _injector;
   _renderer;
-  _backdropClick = new import_rxjs.Subject();
-  _attachments = new import_rxjs.Subject();
-  _detachments = new import_rxjs.Subject();
+  _backdropClick = new Subject();
+  _attachments = new Subject();
+  _detachments = new Subject();
   _positionStrategy;
   _scrollStrategy;
-  _locationChanges = import_rxjs.Subscription.EMPTY;
+  _locationChanges = Subscription.EMPTY;
   _backdropRef = null;
   _detachContentMutationObserver;
   _detachContentAfterRenderRef;
@@ -1307,9 +1305,9 @@ var OverlayRef = class {
    */
   _previousHostParent;
   /** Stream of keydown events dispatched to this overlay. */
-  _keydownEvents = new import_rxjs.Subject();
+  _keydownEvents = new Subject();
   /** Stream of mouse outside events dispatched to this overlay. */
-  _outsidePointerEvents = new import_rxjs.Subject();
+  _outsidePointerEvents = new Subject();
   /** Reference to the currently-running `afterNextRender` call. */
   _afterNextRenderRef;
   constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false, _injector, _renderer) {
@@ -1722,9 +1720,9 @@ var FlexibleConnectedPositionStrategy = class {
   /** The last calculated scroll visibility. Only tracked  */
   _lastScrollVisibility;
   /** Subject that emits whenever the position changes. */
-  _positionChanges = new import_rxjs.Subject();
+  _positionChanges = new Subject();
   /** Subscription to viewport size changes. */
-  _resizeSubscription = import_rxjs.Subscription.EMPTY;
+  _resizeSubscription = Subscription.EMPTY;
   /** Default offset for the overlay along the x axis. */
   _offsetX = 0;
   /** Default offset for the overlay along the y axis. */
@@ -2899,10 +2897,10 @@ var CdkConnectedOverlay = class _CdkConnectedOverlay {
   _injector = inject(Injector);
   _overlayRef;
   _templatePortal;
-  _backdropSubscription = import_rxjs.Subscription.EMPTY;
-  _attachSubscription = import_rxjs.Subscription.EMPTY;
-  _detachSubscription = import_rxjs.Subscription.EMPTY;
-  _positionSubscription = import_rxjs.Subscription.EMPTY;
+  _backdropSubscription = Subscription.EMPTY;
+  _attachSubscription = Subscription.EMPTY;
+  _detachSubscription = Subscription.EMPTY;
+  _positionSubscription = Subscription.EMPTY;
   _offsetX;
   _offsetY;
   _position;
@@ -3138,7 +3136,7 @@ var CdkConnectedOverlay = class _CdkConnectedOverlay {
     }
     this._positionSubscription.unsubscribe();
     if (this.positionChange.observers.length > 0) {
-      this._positionSubscription = this._position.positionChanges.pipe((0, import_operators.takeWhile)(() => this.positionChange.observers.length > 0)).subscribe((position) => {
+      this._positionSubscription = this._position.positionChanges.pipe(takeWhile(() => this.positionChange.observers.length > 0)).subscribe((position) => {
         this._ngZone.run(() => this.positionChange.emit(position));
         if (this.positionChange.observers.length === 0) {
           this._positionSubscription.unsubscribe();
@@ -3364,8 +3362,6 @@ var OverlayModule = class _OverlayModule {
 })();
 
 // node_modules/@angular/cdk/fesm2022/overlay.mjs
-var import_rxjs2 = __toESM(require_cjs(), 1);
-var import_operators2 = __toESM(require_operators(), 1);
 var FullscreenOverlayContainer = class _FullscreenOverlayContainer extends OverlayContainer {
   _renderer = inject(RendererFactory2).createRenderer(null, null);
   _fullScreenEventName;
@@ -3450,4 +3446,4 @@ export {
   CdkConnectedOverlay,
   OverlayModule
 };
-//# sourceMappingURL=chunk-DYXTGBEC.js.map
+//# sourceMappingURL=chunk-TDWAO24Q.js.map

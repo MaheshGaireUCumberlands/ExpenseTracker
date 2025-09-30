@@ -1,16 +1,11 @@
 <mat-card>
   <h2>Spending by Category</h2>
   <div class="chart-container" style="position: relative; height: 400px; width: 400px; margin: 0 auto;">
-    <canvas baseChart
-            [data]="pieData"
-            [options]="pieOptions"
-            chartType="pie">
-    </canvas>
+    <canvas #chartCanvas width="400" height="400"></canvas>
   </div>
   
   <!-- Debug info -->
   <div style="margin-top: 20px; font-size: 12px; color: #666;">
-    <p>Labels: {{ pieData?.labels?.join(', ') || 'No labels' }}</p>
-    <p>Data: {{ pieData?.datasets?.[0]?.data?.join(', ') || 'No data' }}</p>
+    <p>Chart Data Debug: {{ debugInfo }}</p>
   </div>
 </mat-card>
