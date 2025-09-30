@@ -17,7 +17,7 @@ export class PwaService {
   // PWA installation and update states
   private deferredPrompt: any = null;
   private isInstallable = new BehaviorSubject<boolean>(false);
-  private isOnline = new BehaviorSubject<boolean>(isPlatformBrowser(this.platformId) ? navigator.onLine : true);
+  private isOnline = new BehaviorSubject<boolean>(true); // Initialize as true, will be set correctly in constructor
   private updateAvailable = new BehaviorSubject<boolean>(false);
 
   // Public observables
@@ -26,6 +26,11 @@ export class PwaService {
   updateAvailable$ = this.updateAvailable.asObservable();
 
   constructor() {
+    // Set initial online status safely
+    if (isPlatformBrowser(this.platformId)) {
+      this.isOnline.next(navigator.onLine);
+    }
+    
     this.initializePwaFeatures();
     this.setupUpdateChecks();
     this.setupNetworkStatusTracking();

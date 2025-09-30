@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "angular-expense-tracker",
   "buildCommand": "npm run build:prod",
   "outputDirectory": "dist/angular-expense-tracker/browser",
   "installCommand": "npm ci",
@@ -22,7 +21,7 @@
       ]
     },
     {
-      "source": "/(.*\\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))",
+      "source": "/static/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
